@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:gfe="http://www.springframework.org/schema/gemfire"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/gemfire http://www.springframework.org/schema/gemfire/spring-gemfire.xsd">
+
+	<!-- Config -->
+	
+    <gfe:annotation-driven/>
+    
+    <gfe:client-cache id="AccessingDataGemFireApplicationMsg" pool-name="myPoolMsg"  />
+
+    <gfe:pool id="myPoolMsg" subscription-enabled="true" >    
+    	<gfe:locator host="${geode.locator.host}" port="${geode.locator.port}" />    		
+  	</gfe:pool>
+    
+    <gfe:client-region id="Message" cache-ref="AccessingDataGemFireApplicationMsg" pool-name="myPoolMsg" shortcut="PROXY"/>
+    
+    <!-- Listener -->
+    
+    <gfe:cq-listener-container id="myListener" cache="AccessingDataGemFireApplicationMsg">
+	   <!-- default handle method -->
+	   <gfe:listener ref="listener" query="SELECT * FROM /Message"/>
+	</gfe:cq-listener-container>
+	
+	<bean id="listener" class="it.blog.gemfire.chat.listener.DefaultEventDelegate"/>
+    
+</beans>

@@ -1,0 +1,11 @@
+start locator --name=locator1
+
+start server --name=server1 --classpath=C:/progetti/Java8/SpringGeodeChat/target/classes
+
+#create region --name=People --type=PARTITION_PERSISTENT
+#create region --name=Message --type=PARTITION_PERSISTENT
+create region --name=Message --type=PARTITION_PERSISTENT --entry-time-to-live-expiration=60 --entry-time-to-live-expiration-action=destroy --enable-statistics=true 
+
+list members
+
+describe region --name=Message
